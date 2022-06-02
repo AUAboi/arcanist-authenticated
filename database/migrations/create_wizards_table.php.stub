@@ -12,6 +12,7 @@ class CreateWizardsTable extends Migration
             $table->increments('id');
             $table->string('class');
             $table->json('data');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }

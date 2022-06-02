@@ -44,17 +44,17 @@ class Arcanist
                 )->name("wizard.{$wizard::$slug}.store");
 
                 Route::get(
-                    "/{$routePrefix}/{$wizard::$slug}/{wizardId}/{slug?}",
+                    "/{$routePrefix}/{$wizard::$slug}/{slug?}",
                     "{$wizard}@show",
                 )->name("wizard.{$wizard::$slug}.show");
 
                 Route::post(
-                    "/{$routePrefix}/{$wizard::$slug}/{wizardId}/{slug}",
+                    "/{$routePrefix}/{$wizard::$slug}/{slug}",
                     "{$wizard}@update",
                 )->name("wizard.{$wizard::$slug}.update");
 
                 Route::delete(
-                    "/{$routePrefix}/{$wizard::$slug}/{wizardId}",
+                    "/{$routePrefix}/{$wizard::$slug}",
                     "{$wizard}@destroy",
                 )->name("wizard.{$wizard::$slug}.delete");
             });

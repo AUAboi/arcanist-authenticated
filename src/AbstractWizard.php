@@ -13,31 +13,32 @@ declare(strict_types=1);
 
 namespace Arcanist;
 
-use Arcanist\Action\ActionResult;
-use Arcanist\Contracts\ResponseRenderer;
-use Arcanist\Contracts\WizardActionResolver;
-use Arcanist\Contracts\WizardRepository;
-use Arcanist\Event\WizardFinished;
-use Arcanist\Event\WizardFinishing;
+use function event;
+use function route;
+use function config;
+use function collect;
+use function data_get;
+use function redirect;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Arcanist\Repository\Wizard;
 use Arcanist\Event\WizardLoaded;
 use Arcanist\Event\WizardSaving;
-use Arcanist\Exception\CannotUpdateStepException;
+use Arcanist\Action\ActionResult;
+use Arcanist\Event\WizardFinished;
+use Illuminate\Support\Collection;
+use Arcanist\Event\WizardFinishing;
+use Arcanist\Contracts\ResponseRenderer;
+use Arcanist\Contracts\WizardRepository;
+use Arcanist\Contracts\WizardActionResolver;
 use Arcanist\Exception\UnknownStepException;
-use Arcanist\Exception\WizardNotFoundException;
 use Illuminate\Contracts\Support\Renderable;
 use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\Response;
+use Arcanist\Exception\WizardNotFoundException;
+use Arcanist\Exception\CannotUpdateStepException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use function collect;
-use function config;
-use function data_get;
-use function event;
-use function redirect;
-use function route;
 
 abstract class AbstractWizard
 {
@@ -147,8 +148,9 @@ abstract class AbstractWizard
      *
      * @throws UnknownStepException
      */
-    public function show(Request $request, string $wizardId, ?string $slug = null): Response|Responsable|Renderable
+    public function show(Request $request, ?string $slug = null): Response|Responsable|Renderable
     {
+        $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
         $this->load($wizardId);
 
         if (null === $slug) {
@@ -177,6 +179,7 @@ abstract class AbstractWizard
      */
     public function store(Request $request): Response|Responsable|Renderable
     {
+
         $step = $this->loadFirstStep();
 
         $result = $step->process($request);
@@ -203,8 +206,9 @@ abstract class AbstractWizard
      * @throws UnknownStepException
      * @throws ValidationException
      */
-    public function update(Request $request, string $wizardId, string $slug): Response|Responsable|Renderable
+    public function update(Request $request, string $slug): Response|Responsable|Renderable
     {
+        $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
         $this->load($wizardId);
 
         $step = $this->loadStep($slug);
@@ -236,8 +240,9 @@ abstract class AbstractWizard
             );
     }
 
-    public function destroy(Request $request, string $wizardId): Response|Responsable|Renderable
+    public function destroy(Request $request): Response|Responsable|Renderable
     {
+        $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
         $this->load($wizardId);
 
         $this->beforeDelete($request);
