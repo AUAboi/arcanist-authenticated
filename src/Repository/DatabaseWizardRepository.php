@@ -36,6 +36,7 @@ class DatabaseWizardRepository implements WizardRepository
         $affectedRows = Wizard::where([
             'id' => $wizard->getId(),
             'class' => $wizard::class,
+            'user_id' => auth()->id(),
         ])->delete();
 
         if (0 === $affectedRows) {
@@ -50,6 +51,8 @@ class DatabaseWizardRepository implements WizardRepository
         $model = Wizard::create([
             'class' => $wizard::class,
             'data' => $data,
+            'user_id' => auth()->id(),
+
         ]);
 
         $wizard->setId($model->id);
@@ -72,6 +75,8 @@ class DatabaseWizardRepository implements WizardRepository
         $model = Wizard::where([
             'id' => $wizard->getId(),
             'class' => $wizard::class,
+            'user_id' => auth()->id(),
+
         ])->first();
 
         if (null === $model) {
