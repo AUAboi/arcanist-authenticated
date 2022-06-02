@@ -159,6 +159,9 @@ abstract class AbstractWizard
     public function show(Request $request, ?string $slug = null): Response|Responsable|Renderable
     {
         $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
+        if (!$wizardId) {
+            return redirect(route('wizard.' . static::$slug . '.create'));
+        }
         $this->load((string) $wizardId);
 
         if (null === $slug) {
