@@ -140,6 +140,12 @@ abstract class AbstractWizard
      */
     public function create(Request $request): Responsable|Response|Renderable
     {
+        $wizard = Wizard::where('user_id', auth()->id());
+        if ($wizard->exists()) {
+            return Redirect::route('wizard.' . $wizard->pluck('slug')->first() . 'show', [
+                'slug' => $this->steps[0]->slug,
+            ]);
+        }
         return $this->renderStep($request, $this->steps[0]);
     }
 
@@ -151,7 +157,7 @@ abstract class AbstractWizard
     public function show(Request $request, ?string $slug = null): Response|Responsable|Renderable
     {
         $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
-        $this->load($wizardId);
+        $this->load((string) $wizardId);
 
         if (null === $slug) {
             return $this->responseRenderer->redirect(
@@ -209,7 +215,7 @@ abstract class AbstractWizard
     public function update(Request $request, string $slug): Response|Responsable|Renderable
     {
         $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
-        $this->load($wizardId);
+        $this->load((string)$wizardId);
 
         $step = $this->loadStep($slug);
 
@@ -243,7 +249,7 @@ abstract class AbstractWizard
     public function destroy(Request $request): Response|Responsable|Renderable
     {
         $wizardId = Wizard::where('user_id', auth()->id())->pluck('id')->first();
-        $this->load($wizardId);
+        $this->load((string)$wizardId);
 
         $this->beforeDelete($request);
 
