@@ -143,12 +143,13 @@ abstract class AbstractWizard
     {
         $wizard = Wizard::where('user_id', auth()->id());
         if ($wizard->exists()) {
-            return Redirect::route('wizard.' . static::$slug . 'show', [
+            return Redirect::route('wizard.' . static::$slug . '.show', [
                 'slug' => $this->steps[0]->slug,
             ]);
         }
         return $this->renderStep($request, $this->steps[0]);
     }
+
 
     /**
      * Renders the template of the current step.
