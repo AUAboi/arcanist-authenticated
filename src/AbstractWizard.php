@@ -143,7 +143,7 @@ abstract class AbstractWizard
     {
         $wizard = Wizard::where('user_id', auth()->id());
         if ($wizard->exists()) {
-            return Redirect::route('wizard.' . $wizard->pluck('slug')->first() . 'show', [
+            return Redirect::route('wizard.' . $this->slug . 'show', [
                 'slug' => $this->steps[0]->slug,
             ]);
         }
