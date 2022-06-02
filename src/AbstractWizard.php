@@ -21,6 +21,7 @@ use function data_get;
 use function redirect;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Arcanist\Repository\Wizard;
 use Arcanist\Event\WizardLoaded;
 use Arcanist\Event\WizardSaving;
