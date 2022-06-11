@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Arcanist;
 
 use Illuminate\Foundation\Validation\ValidatesRequests;
-use function collect;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
