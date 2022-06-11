@@ -78,7 +78,7 @@ abstract class WizardStep
      */
     public function process(Request $request): StepResult
     {
-        $data = $this->validate($request, $this->rules());
+        $data = $this->validate($request, $this->rules(), $this->errorMessages());
 
         return collect($this->fields())
             ->mapWithKeys(fn (Field $field) => [
@@ -153,6 +153,20 @@ abstract class WizardStep
                 return Arr::isAssoc($field->rules)
                     ? $field->rules
                     : [$field->name => $field->rules];
+            })
+            ->all();
+    }
+
+    /**
+     * The validation messages for the step's form.
+     */
+    protected function errorMessages(): array
+    {
+        return collect($this->fields())
+            ->mapWithKeys(function (Field $field) {
+                return Arr::isAssoc($field->errorMessages)
+                    ? $field->errorMessages
+                    : [];
             })
             ->all();
     }

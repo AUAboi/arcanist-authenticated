@@ -24,6 +24,7 @@ class Field
         public string $name,
         public array $rules = ['nullable'],
         public array $dependencies = [],
+        public array $errorMessages = [],
     ) {
     }
 
@@ -35,6 +36,13 @@ class Field
     public function rules(array $rules): self
     {
         $this->rules = $rules;
+
+        return $this;
+    }
+
+    public function errorMessages(array $errorMessages): self
+    {
+        $this->errorMessages = $errorMessages;
 
         return $this;
     }
